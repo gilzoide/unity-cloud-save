@@ -10,10 +10,11 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
     {
         [SerializeField] private List<CloudSaveCell> _cells;
         [SerializeField] private InputField _dataInput;
+        [SerializeField] private GameObject _loadingOverlay;
 
         private ICloudSaveProvider _cloudSaveProvider;
 
-        void Start()
+        private void Start()
         {
 #if UNITY_EDITOR
             _cloudSaveProvider = new EditorCloudSaveProvider();
@@ -22,6 +23,7 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
 #else
             _cloudSaveProvider = new DummyCloudSaveProvider();
 #endif
+            _loadingOverlay.SetActive(true);
             Social.localUser.Authenticate(success =>
             {
                 RefreshSavedGames();
@@ -30,15 +32,22 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
 
         public async void RefreshSavedGames()
         {
-            List<ISavedGame> games = await _cloudSaveProvider.FetchSavedGamesAsync();
-            foreach (ISavedGame game in games)
+            try
             {
-                foreach (CloudSaveCell cell in _cells.Where(c => c.CloudSaveFileName == game.Name))
+                List<ISavedGame> games = await _cloudSaveProvider.FetchSavedGamesAsync();
+                foreach (ISavedGame game in games)
                 {
-                    cell.SavedGame = game;
+                    foreach (CloudSaveCell cell in _cells.Where(c => c.CloudSaveFileName == game.Name))
+                    {
+                        cell.SavedGame = game;
+                    }
                 }
+                Debug.Log("[ChooseSaveController] Fetched existing games");
             }
-            Debug.Log("[ChooseSaveController] Fetched existing games");
+            finally
+            {
+                _loadingOverlay.SetActive(false);
+            }
         }
 
         public async void CreateSaveGame(CloudSaveCell cell)
