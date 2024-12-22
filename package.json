@@ -2,7 +2,7 @@
   "name": "com.gilzoide.cloud-save",
   "displayName": "Cloud Save",
   "version": "1.0.0-preview1",
-  "description": "Cloud Save interface, implemented for Google Play Games and Game Center",
+  "description": "Cloud Save interface with implementations for Apple Game Center and Google Play Games",
   "homepage": "https://github.com/gilzoide/unity-cloud-save",
   "license": "Unlicense",
   "author": {
