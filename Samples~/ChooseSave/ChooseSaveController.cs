@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gilzoide.CloudSave.Providers;
@@ -19,6 +17,8 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
         {
 #if UNITY_EDITOR
             _cloudSaveProvider = new EditorCloudSaveProvider();
+#elif UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS
+            _cloudSaveProvider = new GameCenterCloudSaveProvider();
 #else
             _cloudSaveProvider = new DummyCloudSaveProvider();
 #endif
@@ -38,27 +38,32 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
                     cell.SavedGame = game;
                 }
             }
+            Debug.Log("[ChooseSaveController] Fetched existing games");
         }
 
         public async void CreateSaveGame(CloudSaveCell cell)
         {
-            cell.SavedGame = await _cloudSaveProvider.SaveGameAsync(cell.CloudSaveFileName, "");
+            cell.SavedGame = await _cloudSaveProvider.SaveGameAsync(cell.CloudSaveFileName, ".");
+            Debug.Log($"[ChooseSaveController] Game created: {cell.CloudSaveFileName}");
         }
 
         public async void LoadSavedGame(CloudSaveCell cell)
         {
             _dataInput.text = await cell.SavedGame.LoadTextAsync();
+            Debug.Log($"[ChooseSaveController] Game loaded: {cell.CloudSaveFileName}");
         }
 
         public async void SaveGame(CloudSaveCell cell)
         {
             cell.SavedGame = await _cloudSaveProvider.SaveGameAsync(cell.CloudSaveFileName, _dataInput.text);
+            Debug.Log($"[ChooseSaveController] Game saved: {cell.CloudSaveFileName}");
         }
 
         public async void DeleteGame(CloudSaveCell cell)
         {
             await _cloudSaveProvider.DeleteGameAsync(cell.CloudSaveFileName);
             cell.SavedGame = null;
+            Debug.Log($"[ChooseSaveController] Game deleted: {cell.CloudSaveFileName}");
         }
     }
 }
