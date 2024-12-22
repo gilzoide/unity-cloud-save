@@ -11,10 +11,10 @@ namespace Gilzoide.CloudSave.Providers
         private readonly GKSavedGameRef _savedGame;
 
         public string Name => _savedGame.Name;
-        public string Description => "";
+        public string Description => null;
         public TimeSpan TotalPlayTime => default;
         public DateTime LastModifiedTimestamp => default;
-        public string DeviceName => "";
+        public string DeviceName => null;
 
         internal GameCenterSavedGame(GKSavedGameRef savedGame)
         {
