@@ -24,10 +24,21 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
             _cloudSaveProvider = new DummyCloudSaveProvider();
 #endif
             _loadingOverlay.SetActive(true);
-            Social.localUser.Authenticate(success =>
+            if (Social.localUser.authenticated)
             {
                 RefreshSavedGames();
-            });
+            }
+            else
+            {
+                Social.localUser.Authenticate((success, message) =>
+                {
+                    if (!success)
+                    {
+                        Debug.LogError($"Social authenticate error: {message}");
+                    }
+                    RefreshSavedGames();
+                });
+            }
         }
 
         public async void RefreshSavedGames()
