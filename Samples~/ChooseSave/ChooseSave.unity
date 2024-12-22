@@ -657,7 +657,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: _cloudSaveFileName
-      value: Save 3
+      value: Save3
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: OnLoad.m_PersistentCalls.m_Calls.Array.size
@@ -1327,7 +1327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: _cloudSaveFileName
-      value: Save 2
+      value: Save2
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: OnLoad.m_PersistentCalls.m_Calls.Array.size
@@ -2016,7 +2016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: _cloudSaveFileName
-      value: Save 1
+      value: Save1
       objectReference: {fileID: 0}
     - target: {fileID: 7857490082778318180, guid: 51dad64b586ca4446900e99ea93b9680, type: 3}
       propertyPath: OnLoad.m_PersistentCalls.m_Calls.Array.size
