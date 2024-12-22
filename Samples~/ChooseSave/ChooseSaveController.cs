@@ -18,6 +18,9 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
         {
 #if UNITY_EDITOR
             _cloudSaveProvider = new EditorCloudSaveProvider();
+#elif UNITY_ANDROID && HAVE_GOOGLE_PLAY_GAMES
+            GooglePlayGames.PlayGamesPlatform.Activate();
+            _cloudSaveProvider = new PlayGamesCloudSaveProvider();
 #elif UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS
             _cloudSaveProvider = new GameCenterCloudSaveProvider();
 #else

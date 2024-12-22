@@ -1,7 +1,9 @@
 {
     "name": "Gilzoide.CloudSave",
     "rootNamespace": "Gilzoide.CloudSave",
-    "references": [],
+    "references": [
+        "Google.Play.Games"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
