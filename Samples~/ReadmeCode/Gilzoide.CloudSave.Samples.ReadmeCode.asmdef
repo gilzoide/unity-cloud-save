@@ -1,0 +1,17 @@
+{
+    "name": "Gilzoide.CloudSave.Samples.ReadmeCode",
+    "rootNamespace": "Gilzoide.CloudSave.Samples.ReadmeCode",
+    "references": [
+        "GUID:2c2b7e7c57e3e4005a2adbe59776ab0d",
+        "GUID:1ed07ff861e5f468287b0baef844706d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
