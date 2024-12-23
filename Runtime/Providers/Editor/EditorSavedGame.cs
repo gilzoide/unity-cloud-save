@@ -11,14 +11,9 @@ namespace Gilzoide.CloudSave
         public FileInfo File { get; private set; }
 
         public string Name => File.Name;
-
         public string Description => null;
-
         public TimeSpan? TotalPlayTime => null;
-
         public DateTime? LastModifiedTimestamp => File.LastWriteTimeUtc;
-
-        public string DeviceName => null;
 
         public EditorSavedGame(FileInfo file)
         {

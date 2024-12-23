@@ -6,9 +6,9 @@ static NSString *toNSString(const char *s) {
 	return [NSString stringWithCString:s encoding:NSUTF8StringEncoding];
 }
 
-static const char *safestrdup(const char *s) {
+static const char *safestrdup(NSString *s) {
 	if (s) {
-		return strdup(s);
+		return strdup(s.UTF8String);
 	}
 	else {
 		return NULL;
@@ -147,7 +147,11 @@ void Gilzoide_CloudSave_GameCenter_Delete(const char *name, void (*callback)(voi
 
 // GKSavedGameRef
 const char *Gilzoide_CloudSave_GameCenter_SavedGameName(GKSavedGame *savedGame) {
-	return safestrdup(savedGame.name.UTF8String);
+	return safestrdup(savedGame.name);
+}
+
+int64_t Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(GKSavedGame *savedGame) {
+	return (int64_t) savedGame.modificationDate.timeIntervalSince1970;
 }
 
 void Gilzoide_CloudSave_GameCenter_SavedGameLoad(GKSavedGame *savedGame, void(*callback)(void *userdata, NSData *data, NSError *error), void *userdata) {
@@ -156,11 +160,7 @@ void Gilzoide_CloudSave_GameCenter_SavedGameLoad(GKSavedGame *savedGame, void(*c
 	}];
 }
 
-int64_t Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(GKSavedGame *savedGame) {
-	return (int64_t) savedGame.modificationDate.timeIntervalSince1970;
-}
-
 // CFErrorRef
 const char *Gilzoide_CloudSave_GameCenter_ErrorToString(NSError *error) {
-	return safestrdup(error.localizedDescription.UTF8String);
+	return safestrdup(error.localizedDescription);
 }

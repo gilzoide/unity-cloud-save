@@ -11,14 +11,9 @@ namespace Gilzoide.CloudSave.Providers
         public ISavedGameMetadata SavedGameMetadata { get; private set; }
 
         public string Name => SavedGameMetadata.Filename;
-
         public string Description => SavedGameMetadata.Description;
-
         public TimeSpan? TotalPlayTime => SavedGameMetadata.TotalTimePlayed;
-
         public DateTime? LastModifiedTimestamp => SavedGameMetadata.LastModifiedTimestamp;
-
-        public string DeviceName => null;
 
         public PlayGamesSavedGame(ISavedGameMetadata savedGameMetadata)
         {

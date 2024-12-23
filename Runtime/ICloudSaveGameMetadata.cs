@@ -8,6 +8,5 @@ namespace Gilzoide.CloudSave
         string Description { get; }
         TimeSpan? TotalPlayTime { get; }
         DateTime? LastModifiedTimestamp { get; }
-        string DeviceName { get; }
     }
 }
