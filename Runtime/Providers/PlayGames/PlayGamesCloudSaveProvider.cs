@@ -93,7 +93,7 @@ namespace Gilzoide.CloudSave.Providers
                     }
                     else
                     {
-                        taskCompletionSource.TrySetException(new CloudSaveException($"Load error: {status}"));
+                        taskCompletionSource.TrySetException(new CloudSaveException($"Save error: {status}"));
                     }
                 });
                 return await taskCompletionSource.Task;
