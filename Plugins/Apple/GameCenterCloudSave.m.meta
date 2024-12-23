@@ -20,10 +20,12 @@ PluginImporter:
         Exclude Editor: 1
         Exclude Linux64: 1
         Exclude OSXUniversal: 1
+        Exclude VisionOS: 0
         Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
         Exclude iOS: 0
+        Exclude tvOS: 0
   - first:
       Android: Android
     second:
@@ -69,19 +71,32 @@ PluginImporter:
       settings:
         CPU: None
   - first:
+      VisionOS: VisionOS
+    second:
+      enabled: 1
+      settings:
+        AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: -fobjc-arc
+        FrameworkDependencies: GameKit;
+  - first:
       iPhone: iOS
     second:
       enabled: 1
       settings:
         AddToEmbeddedBinaries: false
         CPU: AnyCPU
-        CompileFlags: 
+        CompileFlags: -fobjc-arc
         FrameworkDependencies: GameKit;
   - first:
       tvOS: tvOS
     second:
       enabled: 1
-      settings: {}
+      settings:
+        AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: -fobjc-arc
+        FrameworkDependencies: GameKit;
   userData: 
   assetBundleName: 
   assetBundleVariant: 
