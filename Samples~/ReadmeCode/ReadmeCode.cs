@@ -10,7 +10,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         // 1. Instantiate the wanted cloud save provider implementation.
         ICloudSaveProvider cloudSaveProvider;
 #if UNITY_EDITOR
-        // 1.a The Editor provider stores "cloud saves" in the "Library/Gilzoide.CloudSave" folder.
+        // 1.a The Editor provider stores files in the "Library/Gilzoide.CloudSave" folder.
         // This is not the folder one would usually store game save data, so it functions
         // as a "cloud save" folder even after you clear regular save files or PlayerPrefs.
         cloudSaveProvider = new EditorCloudSaveProvider();
@@ -28,7 +28,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         // Users must be logged in to Game Center and iCloud for cloud save to work.
         cloudSaveProvider = new GameCenterCloudSaveProvider();
 #else
-        // 1.d The Dummy provider does absolutely nothing and exists for unsupported platforms.
+        // 1.d The Dummy provider does nothing and exists for use in unsupported platforms.
         // Calling methods on it do not throw, but they also do not save anything.
         cloudSaveProvider = new DummyCloudSaveProvider();
 #endif
@@ -72,7 +72,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         }
 
         // 5. Now do something with the cloud save provider
-        List<ICloudSaveGameMetadata> savedGames = await cloudSaveProvider.FetchSavedGamesAsync();
+        List<ICloudSaveGameMetadata> savedGames = await cloudSaveProvider.FetchAllAsync();
         foreach (ICloudSaveGameMetadata savedGame in savedGames)
         {
             Debug.Log($"Found saved game with name {savedGame.Name}");
@@ -86,6 +86,6 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         byte[] savedBytes = await cloudSaveProvider.LoadBytesAsync("SaveBytes");
         Vector3 savedJson = await cloudSaveProvider.LoadJsonAsync<Vector3>("SaveJson");
 
-        await cloudSaveProvider.DeleteGameAsync("SaveText");
+        await cloudSaveProvider.DeleteAsync("SaveText");
     }
 }

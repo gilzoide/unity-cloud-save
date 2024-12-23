@@ -21,7 +21,7 @@ namespace Gilzoide.CloudSave.Providers
             CloudSaveDirectory = cloudSaveDirectory;
         }
 
-        public Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public Task<List<ICloudSaveGameMetadata>> FetchAllAsync(CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {
@@ -42,7 +42,7 @@ namespace Gilzoide.CloudSave.Providers
             }, cancellationToken);
         }
 
-        public Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> FindAsync(string name, CancellationToken cancellationToken = default)
         {
             return Task.Run<ICloudSaveGameMetadata>(() =>
             {
@@ -104,7 +104,7 @@ namespace Gilzoide.CloudSave.Providers
             }, cancellationToken);
         }
 
-        public Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<bool> DeleteAsync(string name, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {

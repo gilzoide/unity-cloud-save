@@ -48,7 +48,7 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
         {
             try
             {
-                List<ICloudSaveGameMetadata> games = await _cloudSaveProvider.FetchSavedGamesAsync();
+                List<ICloudSaveGameMetadata> games = await _cloudSaveProvider.FetchAllAsync();
                 foreach (ICloudSaveGameMetadata game in games)
                 {
                     foreach (CloudSaveCell cell in _cells.Where(c => c.CloudSaveFileName == game.Name))
@@ -84,7 +84,7 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
 
         public async void DeleteGame(CloudSaveCell cell)
         {
-            await _cloudSaveProvider.DeleteGameAsync(cell.CloudSaveFileName);
+            await _cloudSaveProvider.DeleteAsync(cell.CloudSaveFileName);
             cell.SavedGame = null;
             Debug.Log($"[ChooseSaveController] Game deleted: {cell.CloudSaveFileName}");
         }

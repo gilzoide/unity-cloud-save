@@ -17,13 +17,13 @@ namespace Gilzoide.CloudSave
         /// <summary>
         /// Fetches a list of cloud save games metadata.
         /// </summary>
-        Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default);
+        Task<List<ICloudSaveGameMetadata>> FetchAllAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Find a saved game with the specified name.
         /// Returns <see langword="null"/> if it cannot be found.
         /// </summary>
-        Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default);
+        Task<ICloudSaveGameMetadata> FindAsync(string name, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Load raw data from a known saved game.
@@ -55,7 +55,7 @@ namespace Gilzoide.CloudSave
         /// Delete a cloud save game with the specified name.
         /// </summary>
         /// <returns></returns>
-        Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(string name, CancellationToken cancellationToken = default);
     }
 
     public static class ICloudSaveProviderExtensions
@@ -64,11 +64,11 @@ namespace Gilzoide.CloudSave
         /// Load raw data from a known cloud save with the specified name.
         /// Returns <see langword="null"/> if it cannot be found.
         /// </summary>
-        /// <seealso cref="ICloudSaveProvider.FindSavedGameAsync"/>
+        /// <seealso cref="ICloudSaveProvider.FindAsync"/>
         /// <seealso cref="ICloudSaveProvider.LoadBytesAsync"/>
         public static async Task<byte[]> LoadBytesAsync(this ICloudSaveProvider cloudSaveProvider, string name, CancellationToken cancellationToken = default)
         {
-            if (await cloudSaveProvider.FindSavedGameAsync(name, cancellationToken) is ICloudSaveGameMetadata metadata)
+            if (await cloudSaveProvider.FindAsync(name, cancellationToken) is ICloudSaveGameMetadata metadata)
             {
                 return await cloudSaveProvider.LoadBytesAsync(metadata, cancellationToken);
             }
@@ -82,11 +82,11 @@ namespace Gilzoide.CloudSave
         /// Load text data from a known cloud save with the specified name.
         /// Returns <see langword="null"/> if it cannot be found.
         /// </summary>
-        /// <seealso cref="ICloudSaveProvider.FindSavedGameAsync"/>
+        /// <seealso cref="ICloudSaveProvider.FindAsync"/>
         /// <seealso cref="ICloudSaveProvider.LoadTextAsync"/>
         public static async Task<string> LoadTextAsync(this ICloudSaveProvider cloudSaveProvider, string name, CancellationToken cancellationToken = default)
         {
-            if (await cloudSaveProvider.FindSavedGameAsync(name, cancellationToken) is ICloudSaveGameMetadata metadata)
+            if (await cloudSaveProvider.FindAsync(name, cancellationToken) is ICloudSaveGameMetadata metadata)
             {
                 return await cloudSaveProvider.LoadTextAsync(metadata, cancellationToken);
             }

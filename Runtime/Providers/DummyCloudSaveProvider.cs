@@ -8,7 +8,7 @@ namespace Gilzoide.CloudSave.Providers
     {
         public bool IsCloudSaveEnabled => false;
 
-        public Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public Task<List<ICloudSaveGameMetadata>> FetchAllAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -20,7 +20,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> FindAsync(string name, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -56,7 +56,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<bool> DeleteAsync(string name, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {

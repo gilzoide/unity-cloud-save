@@ -26,7 +26,7 @@ namespace Gilzoide.CloudSave.Providers
 
         public bool IsCloudSaveEnabled => Gilzoide_CloudSave_GameCenter_IsEnabled();
 
-        public async Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ICloudSaveGameMetadata>> FetchAllAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<List<ICloudSaveGameMetadata>>();
@@ -38,7 +38,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ICloudSaveGameMetadata> FindAsync(string name, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<ICloudSaveGameMetadata>();
@@ -81,7 +81,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteAsync(string name, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<bool>();
