@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Gilzoide.CloudSave
 {
@@ -94,5 +95,39 @@ namespace Gilzoide.CloudSave
                 return null;
             }
         }
+
+        #region JSON Support
+
+        public static async Task<T> LoadJsonAsync<T>(this ICloudSaveProvider cloudSaveProvider, ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
+        {
+            string text = await cloudSaveProvider.LoadTextAsync(metadata, cancellationToken);
+            return JsonUtility.FromJson<T>(text);
+        }
+
+        public static async Task<T> LoadJsonAsync<T>(this ICloudSaveProvider cloudSaveProvider, string name, CancellationToken cancellationToken = default)
+        {
+            string text = await cloudSaveProvider.LoadTextAsync(name, cancellationToken);
+            return JsonUtility.FromJson<T>(text);
+        }
+
+        public static async Task LoadJsonOverwriteAsync(this ICloudSaveProvider cloudSaveProvider, ICloudSaveGameMetadata metadata, object objectToOverwrite, CancellationToken cancellationToken = default)
+        {
+            string text = await cloudSaveProvider.LoadTextAsync(metadata, cancellationToken);
+            JsonUtility.FromJsonOverwrite(text, objectToOverwrite);
+        }
+
+        public static async Task LoadJsonOverwriteAsync(this ICloudSaveProvider cloudSaveProvider, string name, object objectToOverwrite, CancellationToken cancellationToken = default)
+        {
+            string text = await cloudSaveProvider.LoadTextAsync(name, cancellationToken);
+            JsonUtility.FromJsonOverwrite(text, objectToOverwrite);
+        }
+
+        public static Task<ICloudSaveGameMetadata> SaveJsonAsync(this ICloudSaveProvider cloudSaveProvider, string name, object obj, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default)
+        {
+            string text = JsonUtility.ToJson(obj);
+            return cloudSaveProvider.SaveTextAsync(name, text, metadata, cancellationToken);
+        }
+
+        #endregion
     }
 }

@@ -114,9 +114,11 @@ public class MyCloudSaveBehaviour : MonoBehaviour
 
         await cloudSaveProvider.SaveTextAsync("SaveText", "Sample text data");
         await cloudSaveProvider.SaveBytesAsync("SaveBytes", new byte[] { 1, 2, 3, 4 });
+        await cloudSaveProvider.SaveJsonAsync("SaveJson", new Vector3(1, 2, 3));
 
         string savedText = await cloudSaveProvider.LoadTextAsync("SaveText");
         byte[] savedBytes = await cloudSaveProvider.LoadBytesAsync("SaveBytes");
+        Vector3 savedJson = await cloudSaveProvider.LoadJsonAsync<Vector3>("SaveJson");
 
         await cloudSaveProvider.DeleteGameAsync("SaveText");
     }
