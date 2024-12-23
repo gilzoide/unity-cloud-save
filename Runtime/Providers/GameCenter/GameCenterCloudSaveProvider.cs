@@ -26,6 +26,7 @@ namespace Gilzoide.CloudSave.Providers
 
         public async Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
+            ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<List<ISavedGame>>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
@@ -37,6 +38,7 @@ namespace Gilzoide.CloudSave.Providers
 
         public async Task<ISavedGame> LoadGameAsync(string name, CancellationToken cancellationToken = default)
         {
+            ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<ISavedGame>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
@@ -48,6 +50,7 @@ namespace Gilzoide.CloudSave.Providers
 
         public async Task<ISavedGame> SaveGameAsync(string name, byte[] data, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
         {
+            ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<ISavedGame>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
@@ -65,12 +68,21 @@ namespace Gilzoide.CloudSave.Providers
 
         public async Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default)
         {
+            ThrowIfCloudSaveNotEnabled();
             var taskCompletionSource = new TaskCompletionSource<bool>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
                 GCHandle gcHandle = GCHandle.Alloc(taskCompletionSource);
                 Gilzoide_CloudSave_GameCenter_Delete(name, OnDeletePtr, GCHandle.ToIntPtr(gcHandle));
                 return await taskCompletionSource.Task;
+            }
+        }
+
+        private void ThrowIfCloudSaveNotEnabled()
+        {
+            if (!IsCloudSaveEnabled)
+            {
+                throw new CloudSaveNotEnabledException("Cloud save is not enabled: user is not logged in to Game Center");
             }
         }
 
