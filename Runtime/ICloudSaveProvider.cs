@@ -20,8 +20,8 @@ namespace Gilzoide.CloudSave
         Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default);
         Task<byte[]> LoadBytesAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default);
         async Task<string> LoadTextAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default) => Encoding.UTF8.GetString(await LoadBytesAsync(metadata, cancellationToken));
-        Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default);
-        Task<ICloudSaveGameMetadata> SaveTextAsync(string name, string text, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default) => SaveBytesAsync(name, Encoding.UTF8.GetBytes(text), metadata, cancellationToken);
+        Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default);
+        Task<ICloudSaveGameMetadata> SaveTextAsync(string name, string text, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default) => SaveBytesAsync(name, Encoding.UTF8.GetBytes(text), metadata, cancellationToken);
         Task<bool> DeleteGameAsync(string name, CancellationToken cancellationToken = default);
     }
 

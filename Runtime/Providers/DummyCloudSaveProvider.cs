@@ -44,7 +44,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {

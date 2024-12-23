@@ -2,7 +2,7 @@ using System;
 
 namespace Gilzoide.CloudSave
 {
-    public class SaveGameMetadata
+    public class CloudSaveGameMetadataUpdate
     {
         public string Description { get; set; }
         public TimeSpan TotalPlayTime { get; set; }

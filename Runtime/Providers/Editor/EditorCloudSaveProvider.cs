@@ -82,7 +82,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default)
         {
             return Task.Run<ICloudSaveGameMetadata>(() =>
             {
@@ -93,7 +93,7 @@ namespace Gilzoide.CloudSave.Providers
             }, cancellationToken);
         }
 
-        public Task<ICloudSaveGameMetadata> SaveTextAsync(string name, string text, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> SaveTextAsync(string name, string text, CloudSaveGameMetadataUpdate metadata = null, CancellationToken cancellationToken = default)
         {
             return Task.Run<ICloudSaveGameMetadata>(() =>
             {
