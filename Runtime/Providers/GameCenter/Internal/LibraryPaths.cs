@@ -1,6 +1,6 @@
 namespace Gilzoide.CloudSave.Providers.Internal
 {
-    public static class GameCenterLibraryPaths
+    internal static class GameCenterLibraryPaths
     {
 #if UNITY_EDITOR || UNITY_STANDALONE_OSX
         public const string LibraryPath = "gilzoide.cloudsave.gamecenter";

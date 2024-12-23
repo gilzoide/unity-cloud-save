@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gilzoide.CloudSave
 {
-    public class EditorSavedGame : ICloudSaveGameMetadata
+    internal class EditorSavedGame : ICloudSaveGameMetadata
     {
         public FileInfo File { get; private set; }
 

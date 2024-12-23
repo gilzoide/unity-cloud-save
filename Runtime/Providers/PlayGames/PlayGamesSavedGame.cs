@@ -6,7 +6,7 @@ using GooglePlayGames.BasicApi.SavedGame;
 
 namespace Gilzoide.CloudSave.Providers
 {
-    public class PlayGamesSavedGame : ICloudSaveGameMetadata
+    internal class PlayGamesSavedGame : ICloudSaveGameMetadata
     {
         public ISavedGameMetadata SavedGameMetadata { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Gilzoide.CloudSave.Providers
 
         public string DeviceName => null;
 
-        internal PlayGamesSavedGame(ISavedGameMetadata savedGameMetadata)
+        public PlayGamesSavedGame(ISavedGameMetadata savedGameMetadata)
         {
             SavedGameMetadata = savedGameMetadata;
         }

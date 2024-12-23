@@ -4,9 +4,9 @@ using Gilzoide.CloudSave.Providers.Internal;
 
 namespace Gilzoide.CloudSave.Providers
 {
-    public class GameCenterSavedGame : ICloudSaveGameMetadata, IDisposable
+    internal class GameCenterSavedGame : ICloudSaveGameMetadata, IDisposable
     {
-        internal GKSavedGameRef GKSavedGameRef { get; private set; }
+        public GKSavedGameRef GKSavedGameRef { get; private set; }
 
         public string Name => GKSavedGameRef.Name;
         public string Description => null;
@@ -14,7 +14,7 @@ namespace Gilzoide.CloudSave.Providers
         public DateTime LastModifiedTimestamp => default;
         public string DeviceName => null;
 
-        internal GameCenterSavedGame(GKSavedGameRef savedGame)
+        public GameCenterSavedGame(GKSavedGameRef savedGame)
         {
             GKSavedGameRef = savedGame;
         }
