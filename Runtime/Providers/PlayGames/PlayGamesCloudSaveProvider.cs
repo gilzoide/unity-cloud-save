@@ -14,6 +14,8 @@ namespace Gilzoide.CloudSave.Providers
     {
         private static List<ISavedGameMetadata> _savedGames;
 
+        public bool IsCloudSaveEnabled => PlayGamesPlatform.Instance.SavedGame != null;
+
         public async Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             List<ISavedGameMetadata> savedGamesMetadata = await FetchSavedGamesMetadataAsync(cancellationToken: cancellationToken);

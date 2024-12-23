@@ -6,6 +6,8 @@ namespace Gilzoide.CloudSave.Providers
 {
     public class DummyCloudSaveProvider : ICloudSaveProvider
     {
+        public bool IsCloudSaveEnabled => false;
+
         public Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)

@@ -11,6 +11,7 @@ namespace Gilzoide.CloudSave.Providers
 {
     public class GameCenterCloudSaveProvider : ICloudSaveProvider
     {
+        [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern bool Gilzoide_CloudSave_GameCenter_IsEnabled();
         [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern void Gilzoide_CloudSave_GameCenter_Fetch(IntPtr callback, IntPtr userdata);
         [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern void Gilzoide_CloudSave_GameCenter_Load([MarshalAs(UnmanagedType.LPStr)] string name, IntPtr callback, IntPtr userdata);
         [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern void Gilzoide_CloudSave_GameCenter_Save([MarshalAs(UnmanagedType.LPStr)] string name, IntPtr bytes, long bytesSize, IntPtr callback, IntPtr userdata);
@@ -20,6 +21,8 @@ namespace Gilzoide.CloudSave.Providers
         private delegate void LoadDelegate(IntPtr userdata, IntPtr savedGame, IntPtr error);
         private delegate void SaveDelegate(IntPtr userdata, IntPtr savedGame, IntPtr error);
         private delegate void DeleteDelegate(IntPtr userdata, IntPtr error);
+
+        public bool IsCloudSaveEnabled => Gilzoide_CloudSave_GameCenter_IsEnabled();
 
         public async Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {

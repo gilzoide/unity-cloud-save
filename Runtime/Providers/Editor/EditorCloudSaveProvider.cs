@@ -10,6 +10,8 @@ namespace Gilzoide.CloudSave.Providers
     {
         public string CloudSaveDirectory = "Library/Gilzoide.CloudSave";
 
+        public bool IsCloudSaveEnabled => true;
+
         public Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>

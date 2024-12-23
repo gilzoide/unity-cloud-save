@@ -86,6 +86,10 @@ static const char *safestrdup(const char *s) {
 @end
 
 // Exported functions
+bool Gilzoide_CloudSave_GameCenter_IsEnabled() {
+	return GKLocalPlayer.localPlayer.authenticated;
+}
+
 void Gilzoide_CloudSave_GameCenter_Fetch(void (*callback)(void *userdata, NSArray<GKSavedGame *> *savedGames, NSError *error), void *userdata) {
 	[GCSProvider.sharedInstance fetchGamesUsingCache:NO withCallback:^(NSArray<GKSavedGame *> *savedGames, NSError *error) {
 		callback(userdata, savedGames, error);
