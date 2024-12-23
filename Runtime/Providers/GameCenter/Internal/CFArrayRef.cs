@@ -5,16 +5,16 @@ using CFIndex = System.Int64;
 
 namespace Gilzoide.CloudSave.Providers.Internal
 {
-    internal struct CFArrayRef
+    internal readonly struct CFArrayRef
     {
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern CFIndex CFArrayGetCount(IntPtr array);
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern IntPtr CFArrayGetValueAtIndex(IntPtr array, CFIndex index);
 
         private readonly IntPtr _nativeHandle;
 
-        public long LongLength => CFArrayGetCount(_nativeHandle);
-        public int Length => (int) CFArrayGetCount(_nativeHandle);
-        public IntPtr this[int index] => CFArrayGetValueAtIndex(_nativeHandle, index);
+        public readonly long LongLength => CFArrayGetCount(_nativeHandle);
+        public readonly int Length => (int) CFArrayGetCount(_nativeHandle);
+        public readonly IntPtr this[int index] => CFArrayGetValueAtIndex(_nativeHandle, index);
 
         public CFArrayRef(IntPtr ptr)
         {

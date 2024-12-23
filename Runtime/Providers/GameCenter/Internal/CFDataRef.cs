@@ -5,23 +5,23 @@ using CFIndex = System.Int64;
 
 namespace Gilzoide.CloudSave.Providers.Internal
 {
-    internal struct CFDataRef
+    internal readonly struct CFDataRef
     {
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern IntPtr CFDataGetBytePtr(IntPtr data);
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern CFIndex CFDataGetLength(IntPtr data);
 
-        private IntPtr _nativeHandle;
+        private readonly IntPtr _nativeHandle;
 
-        public long LongLength => CFDataGetLength(_nativeHandle);
-        public int Length => (int) CFDataGetLength(_nativeHandle);
-        public IntPtr BytePtr => CFDataGetBytePtr(_nativeHandle);
+        public readonly long LongLength => CFDataGetLength(_nativeHandle);
+        public readonly int Length => (int) CFDataGetLength(_nativeHandle);
+        public readonly IntPtr BytePtr => CFDataGetBytePtr(_nativeHandle);
 
         public CFDataRef(IntPtr handle)
         {
             _nativeHandle = handle;
         }
 
-        public byte[] ToBytes()
+        public readonly byte[] ToBytes()
         {
             var bytes = new byte[LongLength];
             Marshal.Copy(BytePtr, bytes, 0, bytes.Length);

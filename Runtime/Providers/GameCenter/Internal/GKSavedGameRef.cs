@@ -18,7 +18,7 @@ namespace Gilzoide.CloudSave.Providers.Internal
 
         private IntPtr _nativeHandle;
 
-        public string Name => Gilzoide_CloudSave_GameCenter_SavedGameName(_nativeHandle);
+        public readonly string Name => Gilzoide_CloudSave_GameCenter_SavedGameName(_nativeHandle);
 
         public GKSavedGameRef(IntPtr handle)
         {
@@ -38,7 +38,7 @@ namespace Gilzoide.CloudSave.Providers.Internal
             }
         }
 
-        public async Task<byte[]> LoadAsync(CancellationToken cancellationToken = default)
+        public async readonly Task<byte[]> LoadAsync(CancellationToken cancellationToken = default)
         {
             var taskCompletionSource = new TaskCompletionSource<byte[]>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
