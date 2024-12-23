@@ -17,7 +17,7 @@ Future implementations might include [Unity Gaming Services](https://docs.unity.
 
 ## TODO
 - Store additional metadata in Game Center provider, retrieve last save date
-- Add support for resolving conflicts between cloud saved games
+- Add support for choosing how to resolve conflicts between cloud saved games
 - Add a way to automate Game Center / iCloud capabilities in XCode project?
 
 

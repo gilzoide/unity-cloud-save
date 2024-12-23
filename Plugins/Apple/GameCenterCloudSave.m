@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#include <objc/objc.h>
 #import <GameKit/GameKit.h>
 #import <string.h>
 
@@ -16,7 +15,7 @@ static const char *safestrdup(const char *s) {
 	}
 }
 
-@interface GCSProvider : NSObject
+@interface GCSProvider : NSObject<GKLocalPlayerListener>
 
 @property(retain) NSArray<GKSavedGame *> *savedGames;
 
@@ -26,6 +25,9 @@ static const char *safestrdup(const char *s) {
 - (void)loadGameNamed:(NSString *)name withCallback:(void(^)(GKSavedGame *savedGame, NSError *error))callback;
 - (void)saveGameData:(NSData *)data withName:(NSString *)name withCallback:(void(^)(GKSavedGame *savedGame, NSError *error))callback;
 - (void)deleteGamesNamed:(NSString *)name withCallback:(void(^)(NSError *error))callback;
+
+// GKSavedGameListener
+- (void)player:(GKPlayer *)player hasConflictingSavedGames:(NSArray<GKSavedGame *> *)savedGames;
 
 @end
 
@@ -38,6 +40,17 @@ static const char *safestrdup(const char *s) {
 		instance = [[self alloc] init];
 	});
 	return instance;
+}
+
+- (instancetype)init {
+	if (self = [super init]) {
+		[GKLocalPlayer.localPlayer registerListener:self];
+	}
+	return self;
+}
+
+- (void)dealloc {
+	[GKLocalPlayer.localPlayer unregisterListener:self];
 }
 
 - (void)fetchGamesUsingCache:(BOOL)useCache withCallback:(void(^)(NSArray<GKSavedGame *> *savedGames, NSError *error))callback {
@@ -81,6 +94,19 @@ static const char *safestrdup(const char *s) {
 
 - (void)deleteGamesNamed:(NSString *)name withCallback:(void(^)(NSError *error))callback {
 	[GKLocalPlayer.localPlayer deleteSavedGamesWithName:name completionHandler:callback];
+}
+
+// GKSavedGameListener
+- (void)player:(GKPlayer *)player hasConflictingSavedGames:(NSArray<GKSavedGame *> *)savedGames {
+	GKSavedGame *newestGame = nil;
+	for (GKSavedGame *game in savedGames) {
+		if (newestGame == nil || [game.modificationDate timeIntervalSinceDate:newestGame.modificationDate] > 0) {
+			newestGame = game;
+		}
+	}
+	[newestGame loadDataWithCompletionHandler:^(NSData *data, NSError *error) {
+		[GKLocalPlayer.localPlayer resolveConflictingSavedGames:savedGames withData:data completionHandler:^(NSArray<GKSavedGame *> *savedGames, NSError *error) {}];
+	}];
 }
 
 @end
