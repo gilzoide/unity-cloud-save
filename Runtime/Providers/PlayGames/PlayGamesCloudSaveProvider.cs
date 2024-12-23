@@ -68,7 +68,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata saveGameMetadata = null, CancellationToken cancellationToken = default)
+        public async Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, CloudSaveGameMetadataUpdate metadataUpdate = null, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             ISavedGameMetadata metadata = await OpenAsync(name, cancellationToken: cancellationToken);
@@ -76,12 +76,12 @@ namespace Gilzoide.CloudSave.Providers
             var taskCompletionSource = new TaskCompletionSource<ICloudSaveGameMetadata>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
-                SavedGameMetadataUpdate.Builder update = new SavedGameMetadataUpdate.Builder();
-                if (saveGameMetadata?.Description is string description)
+                var update = new SavedGameMetadataUpdate.Builder();
+                if (metadataUpdate?.Description is string description)
                 {
                     update.WithUpdatedDescription(description);
                 }
-                if (saveGameMetadata?.TotalPlayTime is TimeSpan totalPlayTime)
+                if (metadataUpdate?.TotalPlayTime is TimeSpan totalPlayTime)
                 {
                     update.WithUpdatedPlayedTime(totalPlayTime);
                 }
