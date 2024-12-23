@@ -8,9 +8,18 @@ namespace Gilzoide.CloudSave.Providers
 {
     public class EditorCloudSaveProvider : ICloudSaveProvider
     {
-        public string CloudSaveDirectory = "Library/Gilzoide.CloudSave";
+        public string CloudSaveDirectory { get; set; }
 
         public bool IsCloudSaveEnabled => true;
+
+        public EditorCloudSaveProvider() : this("Library/Gilzoide.CloudSave")
+        {
+        }
+
+        public EditorCloudSaveProvider(string cloudSaveDirectory)
+        {
+            CloudSaveDirectory = cloudSaveDirectory;
+        }
 
         public Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {

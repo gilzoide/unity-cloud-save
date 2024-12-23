@@ -74,6 +74,8 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
+        #region Native Callbacks
+
         [MonoPInvokeCallback(typeof(FetchDelegate))]
         private static void OnFetch(IntPtr userdata, IntPtr savedGamesPtr, IntPtr errorPtr)
         {
@@ -170,6 +172,8 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
         private static readonly IntPtr OnDeletePtr = Marshal.GetFunctionPointerForDelegate<DeleteDelegate>(OnDelete);
+
+        #endregion
     }
 }
 #endif
