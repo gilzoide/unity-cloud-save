@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -45,7 +46,7 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
 
         private void Start()
         {
-            _titleText.text = _cloudSaveFileName;
+            RefreshLayout();
             _createButton.onClick.AddListener(() => OnCreateSave.Invoke(this));
             _loadButton.onClick.AddListener(() => OnLoad.Invoke(this));
             _saveButton.onClick.AddListener(() => OnSave.Invoke(this));
@@ -59,6 +60,13 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
             _loadButton.gameObject.SetActive(hasSave);
             _saveButton.gameObject.SetActive(hasSave);
             _deleteButton.gameObject.SetActive(hasSave);
+
+            string title = _cloudSaveFileName;
+            if (SavedGame?.LastModifiedTimestamp is DateTime dateTime)
+            {
+                title += "\n(" + dateTime.ToString("g") + ")";
+            }
+            _titleText.text = title;
         }
     }
 }
