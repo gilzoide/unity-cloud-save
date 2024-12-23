@@ -21,11 +21,11 @@ namespace Gilzoide.CloudSave.Providers
             CloudSaveDirectory = cloudSaveDirectory;
         }
 
-        public Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {
-                var savedGames = new List<ISavedGame>();
+                var savedGames = new List<ICloudSaveGameMetadata>();
 
                 var dir = new DirectoryInfo(CloudSaveDirectory);
                 if (!dir.Exists)
@@ -42,9 +42,9 @@ namespace Gilzoide.CloudSave.Providers
             }, cancellationToken);
         }
 
-        public Task<ISavedGame> LoadGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
         {
-            return Task.Run<ISavedGame>(() =>
+            return Task.Run<ICloudSaveGameMetadata>(() =>
             {
                 var file = new FileInfo(Path.Join(CloudSaveDirectory, name));
                 if (file.Exists)
@@ -58,13 +58,48 @@ namespace Gilzoide.CloudSave.Providers
             }, cancellationToken);
         }
 
-        public Task<ISavedGame> SaveGameAsync(string name, byte[] data, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        public Task<byte[]> LoadBytesAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
         {
-            return Task.Run<ISavedGame>(() =>
+            if (metadata is EditorSavedGame editorSavedGame)
+            {
+                return File.ReadAllBytesAsync(editorSavedGame.File.FullName, cancellationToken);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Task<string> LoadTextAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
+        {
+            if (metadata is EditorSavedGame editorSavedGame)
+            {
+                return File.ReadAllTextAsync(editorSavedGame.File.FullName, cancellationToken);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        {
+            return Task.Run<ICloudSaveGameMetadata>(() =>
             {
                 var file = new FileInfo(Path.Join(CloudSaveDirectory, name));
                 file.Directory.Create();
-                File.WriteAllBytes(file.FullName, data);
+                File.WriteAllBytes(file.FullName, bytes);
+                return new EditorSavedGame(file);
+            }, cancellationToken);
+        }
+
+        public Task<ICloudSaveGameMetadata> SaveTextAsync(string name, string text, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        {
+            return Task.Run<ICloudSaveGameMetadata>(() =>
+            {
+                var file = new FileInfo(Path.Join(CloudSaveDirectory, name));
+                file.Directory.Create();
+                File.WriteAllText(file.FullName, text);
                 return new EditorSavedGame(file);
             }, cancellationToken);
         }

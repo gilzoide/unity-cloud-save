@@ -1,16 +1,14 @@
 #if UNITY_STANDALONE_OSX || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Gilzoide.CloudSave.Providers.Internal;
 
 namespace Gilzoide.CloudSave.Providers
 {
-    public class GameCenterSavedGame : ISavedGame, IDisposable
+    public class GameCenterSavedGame : ICloudSaveGameMetadata, IDisposable
     {
-        private readonly GKSavedGameRef _savedGame;
+        internal GKSavedGameRef GKSavedGameRef { get; private set; }
 
-        public string Name => _savedGame.Name;
+        public string Name => GKSavedGameRef.Name;
         public string Description => null;
         public TimeSpan TotalPlayTime => default;
         public DateTime LastModifiedTimestamp => default;
@@ -18,7 +16,7 @@ namespace Gilzoide.CloudSave.Providers
 
         internal GameCenterSavedGame(GKSavedGameRef savedGame)
         {
-            _savedGame = savedGame;
+            GKSavedGameRef = savedGame;
         }
 
         ~GameCenterSavedGame()
@@ -26,14 +24,9 @@ namespace Gilzoide.CloudSave.Providers
             Dispose();
         }
 
-        public Task<byte[]> LoadDataAsync(CancellationToken cancellationToken = default)
-        {
-            return _savedGame.LoadAsync(cancellationToken);
-        }
-
         public void Dispose()
         {
-            _savedGame.Dispose();
+            GKSavedGameRef.Dispose();
         }
     }
 }

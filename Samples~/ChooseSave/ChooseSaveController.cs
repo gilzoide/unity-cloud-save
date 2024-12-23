@@ -48,8 +48,8 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
         {
             try
             {
-                List<ISavedGame> games = await _cloudSaveProvider.FetchSavedGamesAsync();
-                foreach (ISavedGame game in games)
+                List<ICloudSaveGameMetadata> games = await _cloudSaveProvider.FetchSavedGamesAsync();
+                foreach (ICloudSaveGameMetadata game in games)
                 {
                     foreach (CloudSaveCell cell in _cells.Where(c => c.CloudSaveFileName == game.Name))
                     {
@@ -66,19 +66,19 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
 
         public async void CreateSaveGame(CloudSaveCell cell)
         {
-            cell.SavedGame = await _cloudSaveProvider.SaveGameAsync(cell.CloudSaveFileName, ".");
+            cell.SavedGame = await _cloudSaveProvider.SaveTextAsync(cell.CloudSaveFileName, ".");
             Debug.Log($"[ChooseSaveController] Game created: {cell.CloudSaveFileName}");
         }
 
         public async void LoadSavedGame(CloudSaveCell cell)
         {
-            _dataInput.text = await cell.SavedGame.LoadTextAsync();
+            _dataInput.text = await _cloudSaveProvider.LoadTextAsync(cell.SavedGame);
             Debug.Log($"[ChooseSaveController] Game loaded: {cell.CloudSaveFileName}");
         }
 
         public async void SaveGame(CloudSaveCell cell)
         {
-            cell.SavedGame = await _cloudSaveProvider.SaveGameAsync(cell.CloudSaveFileName, _dataInput.text);
+            cell.SavedGame = await _cloudSaveProvider.SaveTextAsync(cell.CloudSaveFileName, _dataInput.text);
             Debug.Log($"[ChooseSaveController] Game saved: {cell.CloudSaveFileName}");
         }
 

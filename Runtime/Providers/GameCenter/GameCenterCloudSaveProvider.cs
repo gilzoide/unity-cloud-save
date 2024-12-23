@@ -22,12 +22,14 @@ namespace Gilzoide.CloudSave.Providers
         private delegate void SaveDelegate(IntPtr userdata, IntPtr savedGame, IntPtr error);
         private delegate void DeleteDelegate(IntPtr userdata, IntPtr error);
 
+        #region ICloudSaveProvider
+
         public bool IsCloudSaveEnabled => Gilzoide_CloudSave_GameCenter_IsEnabled();
 
-        public async Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
-            var taskCompletionSource = new TaskCompletionSource<List<ISavedGame>>();
+            var taskCompletionSource = new TaskCompletionSource<List<ICloudSaveGameMetadata>>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
                 GCHandle gcHandle = GCHandle.Alloc(taskCompletionSource);
@@ -36,10 +38,10 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<ISavedGame> LoadGameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
-            var taskCompletionSource = new TaskCompletionSource<ISavedGame>();
+            var taskCompletionSource = new TaskCompletionSource<ICloudSaveGameMetadata>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
                 GCHandle gcHandle = GCHandle.Alloc(taskCompletionSource);
@@ -48,18 +50,31 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<ISavedGame> SaveGameAsync(string name, byte[] data, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+
+        public Task<byte[]> LoadBytesAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
+        {
+            if (metadata is GameCenterSavedGame gameCenterSavedGame)
+            {
+                return gameCenterSavedGame.GKSavedGameRef.LoadAsync(cancellationToken);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
-            var taskCompletionSource = new TaskCompletionSource<ISavedGame>();
+            var taskCompletionSource = new TaskCompletionSource<ICloudSaveGameMetadata>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
                 GCHandle gcHandle = GCHandle.Alloc(taskCompletionSource);
                 unsafe
                 {
-                    fixed (byte* bytes = data)
+                    fixed (byte* bytePtr = bytes)
                     {
-                        Gilzoide_CloudSave_GameCenter_Save(name, (IntPtr)bytes, data.LongLength, OnSavePtr, GCHandle.ToIntPtr(gcHandle));
+                        Gilzoide_CloudSave_GameCenter_Save(name, (IntPtr)bytePtr, bytes.LongLength, OnSavePtr, GCHandle.ToIntPtr(gcHandle));
                     }
                 }
                 return await taskCompletionSource.Task;
@@ -78,6 +93,8 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
+        #endregion
+
         private void ThrowIfCloudSaveNotEnabled()
         {
             if (!IsCloudSaveEnabled)
@@ -92,7 +109,7 @@ namespace Gilzoide.CloudSave.Providers
         private static void OnFetch(IntPtr userdata, IntPtr savedGamesPtr, IntPtr errorPtr)
         {
             GCHandle gcHandle = GCHandle.FromIntPtr(userdata);
-            var taskCompletionSource = (TaskCompletionSource<List<ISavedGame>>) gcHandle.Target;
+            var taskCompletionSource = (TaskCompletionSource<List<ICloudSaveGameMetadata>>) gcHandle.Target;
             gcHandle.Free();
 
             if (errorPtr != IntPtr.Zero)
@@ -103,7 +120,7 @@ namespace Gilzoide.CloudSave.Providers
             else if (savedGamesPtr != IntPtr.Zero)
             {
                 var savedGames = new CFArrayRef(savedGamesPtr);
-                var result = new List<ISavedGame>();
+                var result = new List<ICloudSaveGameMetadata>();
                 for (int i = 0, count = savedGames.Length; i < count; i++)
                 {
                     var game = new GameCenterSavedGame(new GKSavedGameRef(savedGames[i]));
@@ -122,7 +139,7 @@ namespace Gilzoide.CloudSave.Providers
         private static void OnLoad(IntPtr userdata, IntPtr savedGamePtr, IntPtr errorPtr)
         {
             GCHandle gcHandle = GCHandle.FromIntPtr(userdata);
-            var taskCompletionSource = (TaskCompletionSource<ISavedGame>) gcHandle.Target;
+            var taskCompletionSource = (TaskCompletionSource<ICloudSaveGameMetadata>) gcHandle.Target;
             gcHandle.Free();
 
             if (errorPtr != IntPtr.Zero)
@@ -146,7 +163,7 @@ namespace Gilzoide.CloudSave.Providers
         private static void OnSave(IntPtr userdata, IntPtr savedGamePtr, IntPtr errorPtr)
         {
             GCHandle gcHandle = GCHandle.FromIntPtr(userdata);
-            var taskCompletionSource = (TaskCompletionSource<ISavedGame>) gcHandle.Target;
+            var taskCompletionSource = (TaskCompletionSource<ICloudSaveGameMetadata>) gcHandle.Target;
             gcHandle.Free();
 
             if (errorPtr != IntPtr.Zero)

@@ -21,9 +21,9 @@ namespace Gilzoide.CloudSave.Samples.ChooseSave
         public UnityEvent<CloudSaveCell> OnSave;
         public UnityEvent<CloudSaveCell> OnDeleteSave;
 
-        private ISavedGame _savedGame;
+        private ICloudSaveGameMetadata _savedGame;
 
-        public ISavedGame SavedGame
+        public ICloudSaveGameMetadata SavedGame
         {
             get => _savedGame;
             set

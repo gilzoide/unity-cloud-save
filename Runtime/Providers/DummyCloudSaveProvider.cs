@@ -8,39 +8,51 @@ namespace Gilzoide.CloudSave.Providers
     {
         public bool IsCloudSaveEnabled => false;
 
-        public Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromCanceled<List<ISavedGame>>(cancellationToken);
+                return Task.FromCanceled<List<ICloudSaveGameMetadata>>(cancellationToken);
             }
             else
             {
-                return Task.FromResult(new List<ISavedGame>());
+                return Task.FromResult(new List<ICloudSaveGameMetadata>());
             }
         }
 
-        public Task<ISavedGame> LoadGameAsync(string name, CancellationToken cancellationToken = default)
+        public Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromCanceled<ISavedGame>(cancellationToken);
+                return Task.FromCanceled<ICloudSaveGameMetadata>(cancellationToken);
             }
             else
             {
-                return Task.FromResult<ISavedGame>(null);
+                return Task.FromResult<ICloudSaveGameMetadata>(null);
             }
         }
 
-        public Task<ISavedGame> SaveGameAsync(string name, byte[] data, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        public Task<byte[]> LoadBytesAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromCanceled<ISavedGame>(cancellationToken);
+                return Task.FromCanceled<byte[]>(cancellationToken);
             }
             else
             {
-                return Task.FromResult<ISavedGame>(null);
+                return Task.FromResult<byte[]>(null);
+            }
+        }
+
+        public Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata metadata = null, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<ICloudSaveGameMetadata>(cancellationToken);
+            }
+            else
+            {
+                return Task.FromResult<ICloudSaveGameMetadata>(null);
             }
         }
 

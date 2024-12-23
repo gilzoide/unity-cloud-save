@@ -2,52 +2,34 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GooglePlayGames;
 using GooglePlayGames.BasicApi.SavedGame;
 
 namespace Gilzoide.CloudSave.Providers
 {
-    public class PlayGamesSavedGame : ISavedGame
+    public class PlayGamesSavedGame : ICloudSaveGameMetadata
     {
-        private ISavedGameMetadata _savedGameMetadata;
+        public ISavedGameMetadata SavedGameMetadata { get; private set; }
 
-        public string Name => _savedGameMetadata.Filename;
+        public string Name => SavedGameMetadata.Filename;
 
-        public string Description => _savedGameMetadata.Description;
+        public string Description => SavedGameMetadata.Description;
 
-        public TimeSpan TotalPlayTime => _savedGameMetadata.TotalTimePlayed;
+        public TimeSpan TotalPlayTime => SavedGameMetadata.TotalTimePlayed;
 
-        public DateTime LastModifiedTimestamp => _savedGameMetadata.LastModifiedTimestamp;
+        public DateTime LastModifiedTimestamp => SavedGameMetadata.LastModifiedTimestamp;
 
         public string DeviceName => null;
 
         internal PlayGamesSavedGame(ISavedGameMetadata savedGameMetadata)
         {
-            _savedGameMetadata = savedGameMetadata;
+            SavedGameMetadata = savedGameMetadata;
         }
 
-        public async Task<byte[]> LoadDataAsync(CancellationToken cancellationToken = default)
+        public async Task OpenAsync(CancellationToken cancellationToken = default)
         {
-            if (!_savedGameMetadata.IsOpen)
+            if (!SavedGameMetadata.IsOpen)
             {
-                _savedGameMetadata = await PlayGamesCloudSaveProvider.OpenAsync(_savedGameMetadata.Filename, cancellationToken: cancellationToken);
-            }
-
-            var taskCompletionSource = new TaskCompletionSource<byte[]>();
-            using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
-            {
-                PlayGamesPlatform.Instance.SavedGame.ReadBinaryData(_savedGameMetadata, (status, bytes) =>
-                {
-                    if (bytes != null)
-                    {
-                        taskCompletionSource.TrySetResult(bytes);
-                    }
-                    else
-                    {
-                        taskCompletionSource.TrySetException(new CloudSaveException($"Load error: {status}"));
-                    }
-                });
-                return await taskCompletionSource.Task;
+                SavedGameMetadata = await PlayGamesCloudSaveProvider.OpenAsync(SavedGameMetadata.Filename, cancellationToken: cancellationToken);
             }
         }
     }

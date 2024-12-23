@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 
 namespace Gilzoide.CloudSave
 {
-    public class EditorSavedGame : ISavedGame
+    public class EditorSavedGame : ICloudSaveGameMetadata
     {
-        private readonly FileInfo _file;
+        public FileInfo File { get; private set; }
 
-        public string Name => _file.Name;
+        public string Name => File.Name;
 
         public string Description => null;
 
         public TimeSpan TotalPlayTime => default;
 
-        public DateTime LastModifiedTimestamp => _file.LastWriteTimeUtc;
+        public DateTime LastModifiedTimestamp => File.LastWriteTimeUtc;
 
         public string DeviceName => null;
 
         public EditorSavedGame(FileInfo file)
         {
-            _file = file;
+            File = file;
         }
 
         public Task<byte[]> LoadDataAsync(CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {
-                return File.ReadAllBytes(_file.FullName);
+                return System.IO.File.ReadAllBytes(File.FullName);
             }, cancellationToken);
         }
     }

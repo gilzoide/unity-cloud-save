@@ -14,17 +14,19 @@ namespace Gilzoide.CloudSave.Providers
     {
         private static List<ISavedGameMetadata> _savedGames;
 
+        #region ICloudSaveProvider
+
         public bool IsCloudSaveEnabled => PlayGamesPlatform.Instance.SavedGame != null;
 
-        public async Task<List<ISavedGame>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ICloudSaveGameMetadata>> FetchSavedGamesAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             List<ISavedGameMetadata> savedGamesMetadata = await FetchSavedGamesMetadataAsync(cancellationToken: cancellationToken);
             _savedGames ??= savedGamesMetadata;
-            return new List<ISavedGame>(savedGamesMetadata.Select(m => new PlayGamesSavedGame(m)));
+            return new List<ICloudSaveGameMetadata>(savedGamesMetadata.Select(m => new PlayGamesSavedGame(m)));
         }
 
-        public async Task<ISavedGame> LoadGameAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ICloudSaveGameMetadata> FindSavedGameAsync(string name, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             ISavedGameMetadata savedGame = await OpenExistingAsync(name, cancellationToken: cancellationToken);
@@ -38,12 +40,40 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        public async Task<ISavedGame> SaveGameAsync(string name, byte[] data, SaveGameMetadata saveGameMetadata = null, CancellationToken cancellationToken = default)
+        public async Task<byte[]> LoadBytesAsync(ICloudSaveGameMetadata metadata, CancellationToken cancellationToken = default)
+        {
+            if (metadata is not PlayGamesSavedGame playGamesSavedGame)
+            {
+                return null;
+            }
+
+            ThrowIfCloudSaveNotEnabled();
+            await playGamesSavedGame.OpenAsync(cancellationToken);
+
+            var taskCompletionSource = new TaskCompletionSource<byte[]>();
+            using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
+            {
+                PlayGamesPlatform.Instance.SavedGame.ReadBinaryData(playGamesSavedGame.SavedGameMetadata, (status, bytes) =>
+                {
+                    if (bytes != null)
+                    {
+                        taskCompletionSource.TrySetResult(bytes);
+                    }
+                    else
+                    {
+                        taskCompletionSource.TrySetException(new CloudSaveException($"Load error: {status}"));
+                    }
+                });
+                return await taskCompletionSource.Task;
+            }
+        }
+
+        public async Task<ICloudSaveGameMetadata> SaveBytesAsync(string name, byte[] bytes, SaveGameMetadata saveGameMetadata = null, CancellationToken cancellationToken = default)
         {
             ThrowIfCloudSaveNotEnabled();
             ISavedGameMetadata metadata = await OpenAsync(name, cancellationToken: cancellationToken);
 
-            var taskCompletionSource = new TaskCompletionSource<ISavedGame>();
+            var taskCompletionSource = new TaskCompletionSource<ICloudSaveGameMetadata>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
             {
                 SavedGameMetadataUpdate.Builder update = new SavedGameMetadataUpdate.Builder();
@@ -55,7 +85,7 @@ namespace Gilzoide.CloudSave.Providers
                 {
                     update.WithUpdatedPlayedTime(totalPlayTime);
                 }
-                PlayGamesPlatform.Instance.SavedGame.CommitUpdate(metadata, update.Build(), data, (status, metadata) =>
+                PlayGamesPlatform.Instance.SavedGame.CommitUpdate(metadata, update.Build(), bytes, (status, metadata) =>
                 {
                     if (metadata != null)
                     {
@@ -84,6 +114,8 @@ namespace Gilzoide.CloudSave.Providers
                 return false;
             }
         }
+
+        #endregion
 
         private void ThrowIfCloudSaveNotEnabled()
         {

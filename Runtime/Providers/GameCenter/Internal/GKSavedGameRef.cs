@@ -49,6 +49,8 @@ namespace Gilzoide.CloudSave.Providers.Internal
             }
         }
 
+        #region Native Callbacks
+
         [MonoPInvokeCallback(typeof(SavedGameLoadDelegate))]
         private static void OnSavedGameLoad(IntPtr userdata, IntPtr dataPtr, IntPtr errorPtr)
         {
@@ -69,6 +71,8 @@ namespace Gilzoide.CloudSave.Providers.Internal
             }
         }
         private static readonly IntPtr OnSavedGameLoadPtr = Marshal.GetFunctionPointerForDelegate<SavedGameLoadDelegate>(OnSavedGameLoad);
+
+        #endregion
     }
 }
 #endif
