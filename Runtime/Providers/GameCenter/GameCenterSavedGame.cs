@@ -10,8 +10,8 @@ namespace Gilzoide.CloudSave.Providers
 
         public string Name => GKSavedGameRef.Name;
         public string Description => null;
-        public TimeSpan TotalPlayTime => default;
-        public DateTime LastModifiedTimestamp => default;
+        public TimeSpan? TotalPlayTime => null;
+        public DateTime? LastModifiedTimestamp => GKSavedGameRef.LastModifiedTimestamp;
         public string DeviceName => null;
 
         public GameCenterSavedGame(GKSavedGameRef savedGame)

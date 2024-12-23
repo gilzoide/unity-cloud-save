@@ -111,7 +111,11 @@ static const char *safestrdup(const char *s) {
 
 @end
 
+///////////////////////////////////////////////////////////
 // Exported functions
+///////////////////////////////////////////////////////////
+
+// GameCenterCloudSaveProvider
 bool Gilzoide_CloudSave_GameCenter_IsEnabled() {
 	return GKLocalPlayer.localPlayer.authenticated;
 }
@@ -141,6 +145,7 @@ void Gilzoide_CloudSave_GameCenter_Delete(const char *name, void (*callback)(voi
 	}];
 }
 
+// GKSavedGameRef
 const char *Gilzoide_CloudSave_GameCenter_SavedGameName(GKSavedGame *savedGame) {
 	return safestrdup(savedGame.name.UTF8String);
 }
@@ -151,6 +156,11 @@ void Gilzoide_CloudSave_GameCenter_SavedGameLoad(GKSavedGame *savedGame, void(*c
 	}];
 }
 
+int64_t Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(GKSavedGame *savedGame) {
+	return (int64_t) savedGame.modificationDate.timeIntervalSince1970;
+}
+
+// CFErrorRef
 const char *Gilzoide_CloudSave_GameCenter_ErrorToString(NSError *error) {
 	return safestrdup(error.localizedDescription.UTF8String);
 }

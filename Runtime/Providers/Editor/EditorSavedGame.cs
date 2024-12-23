@@ -14,9 +14,9 @@ namespace Gilzoide.CloudSave
 
         public string Description => null;
 
-        public TimeSpan TotalPlayTime => default;
+        public TimeSpan? TotalPlayTime => null;
 
-        public DateTime LastModifiedTimestamp => File.LastWriteTimeUtc;
+        public DateTime? LastModifiedTimestamp => File.LastWriteTimeUtc;
 
         public string DeviceName => null;
 

@@ -11,6 +11,7 @@ namespace Gilzoide.CloudSave.Providers.Internal
     {
         [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern string Gilzoide_CloudSave_GameCenter_SavedGameName(IntPtr savedGame);
         [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern void Gilzoide_CloudSave_GameCenter_SavedGameLoad(IntPtr savedGame, IntPtr callback, IntPtr userdata);
+        [DllImport(GameCenterLibraryPaths.LibraryPath)] private static extern long Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(IntPtr savedGame);
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern IntPtr CFRetain(IntPtr cf);
         [DllImport(GameCenterLibraryPaths.CoreFoundationLibraryPath)] private static extern void CFRelease(IntPtr cf);
 
@@ -19,6 +20,7 @@ namespace Gilzoide.CloudSave.Providers.Internal
         private IntPtr _nativeHandle;
 
         public readonly string Name => Gilzoide_CloudSave_GameCenter_SavedGameName(_nativeHandle);
+        public readonly DateTime LastModifiedTimestamp => DateTimeOffset.FromUnixTimeSeconds(Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(_nativeHandle)).DateTime;
 
         public GKSavedGameRef(IntPtr handle)
         {
