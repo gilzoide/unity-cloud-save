@@ -122,7 +122,7 @@ static const char *safestrdup(const char *s) {
 
 // GameCenterCloudSaveProvider
 bool Gilzoide_CloudSave_GameCenter_IsEnabled() {
-	return GKLocalPlayer.localPlayer.authenticated;
+	return GKLocalPlayer.localPlayer.authenticated && NSFileManager.defaultManager.ubiquityIdentityToken;
 }
 
 void Gilzoide_CloudSave_GameCenter_Fetch(void (*callback)(void *userdata, NSArray<GKSavedGame *> *savedGames, NSError *error), void *userdata) {
