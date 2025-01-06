@@ -16,9 +16,9 @@ Future implementations might include [Unity Gaming Services](https://docs.unity.
 
 
 ## TODO
-- Store additional metadata in Game Center provider, retrieve last save date
+- Store additional metadata in Game Center provider
 - Add support for choosing how to resolve conflicts between cloud saved games
-- Add a way to automate Game Center / iCloud capabilities in XCode project?
+- Add a way to automate Game Center / iCloud capabilities in XCode project
 
 
 ## How to install
@@ -114,6 +114,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         foreach (ICloudSaveGameMetadata savedGame in savedGames)
         {
             Debug.Log($"Found saved game with name {savedGame.Name}");
+            byte[] data = await cloudSaveProvider.LoadBytesAsync(savedGame);
         }
 
         await cloudSaveProvider.SaveTextAsync("SaveText", "Sample text data");

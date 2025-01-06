@@ -76,6 +76,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
         foreach (ICloudSaveGameMetadata savedGame in savedGames)
         {
             Debug.Log($"Found saved game with name {savedGame.Name}");
+            byte[] data = await cloudSaveProvider.LoadBytesAsync(savedGame);
         }
 
         await cloudSaveProvider.SaveTextAsync("SaveText", "Sample text data");
