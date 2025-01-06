@@ -3,12 +3,17 @@
 #import <string.h>
 
 static NSString *toNSString(const char *s) {
-	return [NSString stringWithCString:s encoding:NSUTF8StringEncoding];
+	if (s) {
+		return [NSString stringWithCString:s encoding:NSUTF8StringEncoding];
+	}
+	else {
+		return nil;
+	}
 }
 
-static const char *safestrdup(NSString *s) {
+static const char *safestrdup(const char *s) {
 	if (s) {
-		return strdup(s.UTF8String);
+		return strdup(s);
 	}
 	else {
 		return NULL;
@@ -147,7 +152,7 @@ void Gilzoide_CloudSave_GameCenter_Delete(const char *name, void (*callback)(voi
 
 // GKSavedGameRef
 const char *Gilzoide_CloudSave_GameCenter_SavedGameName(GKSavedGame *savedGame) {
-	return safestrdup(savedGame.name);
+	return safestrdup(savedGame.name.UTF8String);
 }
 
 int64_t Gilzoide_CloudSave_GameCenter_SavedGameLastModifiedTimestampUnix(GKSavedGame *savedGame) {
@@ -162,5 +167,5 @@ void Gilzoide_CloudSave_GameCenter_SavedGameLoad(GKSavedGame *savedGame, void(*c
 
 // CFErrorRef
 const char *Gilzoide_CloudSave_GameCenter_ErrorToString(NSError *error) {
-	return safestrdup(error.localizedDescription);
+	return safestrdup(error.localizedDescription.UTF8String);
 }
