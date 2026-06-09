@@ -137,6 +137,7 @@ public class MyCloudSaveBehaviour : MonoBehaviour
 - You must add the iCloud capability to the XCode project.
   The "iCloud Documents" checkbox must be enabled and an iCloud container must be configured for the cloud save to work.
 - The user must be signed in to Game Center and have iCloud Drive enabled in their account for cloud save to work.
+- There is a known [GameKit issue](https://developer.apple.com/forums/thread/718541) where cloud data is not returned on first run after a fresh install of the game. In this situation, a workaround is to delay and retry several times before accepting that there is no cloud data.
 
 
 ## Google Play Games Services
