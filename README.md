@@ -17,7 +17,7 @@ Future implementations might include [Unity Gaming Services](https://docs.unity.
 
 ## TODO
 - Store additional metadata in Game Center provider
-- Add support for choosing how to resolve conflicts between cloud saved games
+- Add support for choosing how to resolve conflicts between cloud saved games (current behavior is most recent is kept).
 - Add a way to automate Game Center / iCloud capabilities in XCode project
 
 
@@ -29,7 +29,7 @@ Either:
   ```
 - Install using the [Unity Package Manager](https://docs.unity3d.com/Manual/upm-ui-giturl.html) with the following URL:
   ```
-  https://github.com/gilzoide/unity-cloud-save.git#1.0.0-preview3
+  https://github.com/gilzoide/unity-cloud-save.git#1.0.0-preview4
   ```
 - Clone this repository or download a snapshot of it directly inside your project's `Assets` or `Packages` folder.
 

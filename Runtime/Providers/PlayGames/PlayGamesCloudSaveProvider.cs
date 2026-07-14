@@ -131,7 +131,7 @@ namespace Gilzoide.CloudSave.Providers
             return _savedGames?.FirstOrDefault(x => x.Filename == name);
         }
 
-        internal async Task<ISavedGameMetadata> OpenExistingAsync(string name, DataSource dataSource = DataSource.ReadCacheOrNetwork, ConflictResolutionStrategy conflictResolutionStrategy = ConflictResolutionStrategy.UseMostRecentlySaved, CancellationToken cancellationToken = default)
+        internal async Task<ISavedGameMetadata> OpenExistingAsync(string name, DataSource dataSource = DataSource.ReadNetworkOnly, ConflictResolutionStrategy conflictResolutionStrategy = ConflictResolutionStrategy.UseMostRecentlySaved, CancellationToken cancellationToken = default)
         {
             ISavedGameMetadata savedGame = await GetExistingSavedGameAsync(name, cancellationToken);
             if (savedGame != null)
@@ -144,7 +144,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        internal static async Task<List<ISavedGameMetadata>> FetchSavedGamesMetadataAsync(DataSource dataSource = DataSource.ReadCacheOrNetwork, CancellationToken cancellationToken = default)
+        internal static async Task<List<ISavedGameMetadata>> FetchSavedGamesMetadataAsync(DataSource dataSource = DataSource.ReadNetworkOnly, CancellationToken cancellationToken = default)
         {
             var taskCompletionSource = new TaskCompletionSource<List<ISavedGameMetadata>>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
@@ -164,7 +164,7 @@ namespace Gilzoide.CloudSave.Providers
             }
         }
 
-        internal static async Task<ISavedGameMetadata> OpenAsync(string name, DataSource dataSource = DataSource.ReadCacheOrNetwork, ConflictResolutionStrategy conflictResolutionStrategy = ConflictResolutionStrategy.UseMostRecentlySaved, CancellationToken cancellationToken = default)
+        internal static async Task<ISavedGameMetadata> OpenAsync(string name, DataSource dataSource = DataSource.ReadNetworkOnly, ConflictResolutionStrategy conflictResolutionStrategy = ConflictResolutionStrategy.UseMostRecentlySaved, CancellationToken cancellationToken = default)
         {
             var taskCompletionSource = new TaskCompletionSource<ISavedGameMetadata>();
             using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled(cancellationToken)))
